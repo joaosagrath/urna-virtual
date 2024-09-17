@@ -1,0 +1,44 @@
+package app.controller;
+
+import app.entity.Eleitor;
+import app.service.EleitorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/eleitores")
+public class EleitorController {
+
+    @Autowired
+    private EleitorService eleitorService;
+
+    // Endpoint para criar um eleitor
+    @PostMapping("/salvar")
+    public ResponseEntity<Eleitor> salvarEleitor(@RequestBody Eleitor eleitor) {
+        Eleitor novoEleitor = eleitorService.salvarEleitor(eleitor);
+        return ResponseEntity.ok(novoEleitor);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Eleitor> editarEleitor(@PathVariable Long id, @RequestBody Eleitor novosDados) {
+        Eleitor eleitorAtualizado = eleitorService.editarEleitor(id, novosDados);
+        return ResponseEntity.ok(eleitorAtualizado);
+    }
+
+    // Endpoint para listar eleitores ativos
+    @GetMapping("/ativos")
+    public ResponseEntity<List<Eleitor>> listarEleitoresAtivos() {
+        List<Eleitor> eleitoresAtivos = eleitorService.getEleitoresAtivos();
+        return ResponseEntity.ok(eleitoresAtivos);
+    }
+
+    // Endpoint para inativar um eleitor
+    @PutMapping("/inativar/{id}")
+    public ResponseEntity<Void> inativarEleitor(@PathVariable Long id) {
+        eleitorService.inativarEleitor(id);
+        return ResponseEntity.noContent().build();
+    }
+}

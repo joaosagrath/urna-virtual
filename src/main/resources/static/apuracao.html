@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Votação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Votação 123</h1>
+	
+	<a href="apuracao.html" id="link-emprestimo">APURACAO</a>
+	
+    <button onclick="fetchVotacao()">Atualizar Votação</button>
+    
+    <h2>Candidatos a Prefeito</h2>
+    <table id="prefeitoTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome Completo</th>
+                <th>Número</th>
+                <th>Cargo</th>
+                <th>Status</th>
+                <th>Total de Votos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- As linhas da tabela serão inseridas aqui pelo JavaScript -->
+        </tbody>
+    </table>
+
+    <h2>Candidatos a Vereador</h2>
+    <table id="vereadorTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome Completo</th>
+                <th>Número</th>
+                <th>Cargo</th>
+                <th>Status</th>
+                <th>Total de Votos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- As linhas da tabela serão inseridas aqui pelo JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        function fetchVotacao() {
+            fetch('/api/votacao/apuracao')
+                .then(response => response.json())
+                .then(data => {
+                    const prefeitoTableBody = document.querySelector('#prefeitoTable tbody');
+                    const vereadorTableBody = document.querySelector('#vereadorTable tbody');
+
+                    // Limpa as tabelas antes de adicionar novos dados
+                    prefeitoTableBody.innerHTML = '';
+                    vereadorTableBody.innerHTML = '';
+
+                    // Preenche a tabela de prefeitos
+                    if (data.candidatosPrefeito && Array.isArray(data.candidatosPrefeito)) {
+                        data.candidatosPrefeito.forEach(candidato => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${candidato.id}</td>
+                                <td>${candidato.nomeCompleto}</td>
+                                <td>${candidato.numero}</td>
+                                <td>${candidato.cargo}</td>
+                                <td>${candidato.status}</td>
+                                <td>${candidato.votosTotais}</td>
+                            `;
+                            prefeitoTableBody.appendChild(row);
+                        });
+                    } else {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td colspan="6">Nenhum dado disponível</td>`;
+                        prefeitoTableBody.appendChild(row);
+                    }
+
+                    // Preenche a tabela de vereadores
+                    if (data.candidatosVereador && Array.isArray(data.candidatosVereador)) {
+                        data.candidatosVereador.forEach(candidato => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${candidato.id}</td>
+                                <td>${candidato.nomeCompleto}</td>
+                                <td>${candidato.numero}</td>
+                                <td>${candidato.cargo}</td>
+                                <td>${candidato.status}</td>
+                                <td>${candidato.votosTotais}</td>
+                            `;
+                            vereadorTableBody.appendChild(row);
+                        });
+                    } else {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td colspan="6">Nenhum dado disponível</td>`;
+                        vereadorTableBody.appendChild(row);
+                    }
+                })
+                .catch(error => console.error('Erro ao buscar dados:', error));
+        }
+
+        // Atualiza a votação ao carregar a página
+        window.onload = fetchVotacao;
+    </script>
+</body>
+</html>
