@@ -34,6 +34,9 @@ public class Candidato {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusCandidato status;
+    
+    @Column(nullable = false)
+    private String foto; // Campo para armazenar o caminho da foto
 
     @Column
     private Integer votosTotais; // Campo para armazenar o total de votos
