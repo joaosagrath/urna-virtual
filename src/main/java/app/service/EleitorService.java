@@ -37,6 +37,11 @@ public class EleitorService {
         // Salvar as alterações no banco de dados
         return eleitorRepository.save(eleitor);
     }
+    
+    // Método para listar todos os eleitores
+    public List<Eleitor> getAlleleitores(){
+    	return eleitorRepository.findAll();
+    }
 
     // Método para listar eleitores ativos
     public List<Eleitor> getEleitoresAtivos() {

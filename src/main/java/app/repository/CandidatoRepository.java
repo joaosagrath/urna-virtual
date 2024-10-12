@@ -10,7 +10,11 @@ import app.entity.Candidato.StatusCandidato;
 
 @Repository
 public interface CandidatoRepository extends JpaRepository<Candidato, Long> {
-    // Buscar apenas candidatos com status ativo
+    
+	// Buscar todos os candidatos
+	List<Candidato> findAll();
+	
+	// Buscar apenas candidatos com status ativo
     List<Candidato> findByStatus(StatusCandidato status);
 }
 

@@ -9,6 +9,10 @@ import app.entity.Eleitor;
 
 @Repository
 public interface EleitorRepository extends JpaRepository<Eleitor, Long> {
-    // Buscar apenas eleitores com status ativo
+    
+	// Buscar todos os candidatos
+	List<Eleitor> findAll();
+	
+	// Buscar apenas eleitores com status ativo
     List<Eleitor> findByStatus(Eleitor.StatusEleitor status);
 }

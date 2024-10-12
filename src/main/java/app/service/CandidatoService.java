@@ -36,6 +36,11 @@ public class CandidatoService {
         // Salvar as alterações no banco de dados
         return candidatoRepository.save(candidato);
     }
+    
+    // Método para listar todos os candidatos
+    public List<Candidato> getAllcandidatos(){
+    	return candidatoRepository.findAll();
+    }
 
     // Método para listar candidatos ativos
     public List<Candidato> getCandidatosAtivos() {

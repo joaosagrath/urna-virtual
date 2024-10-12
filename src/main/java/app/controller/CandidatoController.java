@@ -27,6 +27,13 @@ public class CandidatoController {
         Candidato candidatoAtualizado = candidatoService.editarCandidato(id, novosDados);
         return ResponseEntity.ok(candidatoAtualizado);
     }
+    
+    // Endpoint para listar todos candidatos
+    @GetMapping("/todos")
+    public ResponseEntity<List<Candidato>> listarTodosCandidatos() {
+        List<Candidato> candidatos = candidatoService.getAllcandidatos();
+        return ResponseEntity.ok(candidatos);
+    }
 
     // Endpoint para listar candidatos ativos
     @GetMapping("/ativos")

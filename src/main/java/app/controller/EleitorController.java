@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.entity.Candidato;
 import app.entity.Eleitor;
 import app.service.EleitorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,13 @@ public class EleitorController {
     public ResponseEntity<Eleitor> editarEleitor(@PathVariable Long id, @RequestBody Eleitor novosDados) {
         Eleitor eleitorAtualizado = eleitorService.editarEleitor(id, novosDados);
         return ResponseEntity.ok(eleitorAtualizado);
+    }
+    
+    // endpont para listar todos os eleitores
+    @GetMapping("/todos")
+    public ResponseEntity<List<Eleitor>> listarTodosEleitores() {
+        List<Eleitor> candidatos = eleitorService.getAlleleitores();
+        return ResponseEntity.ok(candidatos);
     }
 
     // Endpoint para listar eleitores ativos
