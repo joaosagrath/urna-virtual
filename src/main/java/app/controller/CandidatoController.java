@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import app.entity.Candidato;
+import app.entity.Eleitor;
 import app.service.CandidatoService;
-import jakarta.persistence.criteria.Path;
 
 @RestController
 @RequestMapping("/api/candidatos")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200") 
 public class CandidatoController {
 
     @Autowired
@@ -49,7 +49,7 @@ public class CandidatoController {
         try {
             // Processar a foto se estiver presente
             if (foto != null && !foto.isEmpty()) {
-                String diretorioFotos = "fotoCandidato/";
+                String diretorioFotos = "c:/fotos/fotoCandidato/";
                 String nomeArquivo = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
                 java.nio.file.Path caminhoArquivo = Paths.get(diretorioFotos + nomeArquivo);
 
@@ -72,7 +72,26 @@ public class CandidatoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
+    
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<Candidato> findById(@PathVariable Long id){
+    	try {
+    		Candidato candidato = this.candidatoService.findById(id);
+			return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+    }
+    
+    @GetMapping("/findByNumero/{numero}")
+    public ResponseEntity<Candidato> findById(@PathVariable int numero){
+    	try {
+    		Candidato candidato = this.candidatoService.findByNumero(numero);
+			return new ResponseEntity<Candidato>(candidato, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+    }
 
     
     @PutMapping("/{id}")

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import app.repository.CandidatoRepository;
 
 import app.entity.Candidato;
+import app.entity.Eleitor;
 
 @Service
 public class CandidatoService {
@@ -20,6 +21,16 @@ public class CandidatoService {
     public Candidato salvarCandidato(Candidato candidato) {
         candidato.setStatus(Candidato.StatusCandidato.ATIVO);
         return candidatoRepository.save(candidato);
+    }
+    
+    public Candidato findById(Long id) {
+    	Candidato candidato = candidatoRepository.findById(id).get();
+    	return candidato;
+    }
+    
+    public Candidato findByNumero(int numero) {
+    	Candidato candidato = candidatoRepository.findByNumero(numero).get();
+    	return candidato;
     }
     
     // Método para editar dados de um candidato

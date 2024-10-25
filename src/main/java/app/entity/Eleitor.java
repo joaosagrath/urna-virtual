@@ -24,21 +24,29 @@ public class Eleitor {
     @NotBlank(message = "Nome completo é obrigatório")
     private String nomeCompleto;
 
-    @Pattern(regexp = "\\d{11}", message = "CPF deve ter 11 dígitos") // Ajuste a regex conforme a necessidade
-    private String cpf;
+    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "CPF deve estar no formato 999.999.999-99")
+    @Column(nullable = true)
+    private String cpf; // Permitir nulo
 
     @NotBlank(message = "Profissão é obrigatória")
     private String profissao;
 
-    @Pattern(regexp = "\\d{10,11}", message = "Telefone celular deve ter entre 10 e 11 dígitos") // Ajuste a regex conforme a necessidade
+    // Regex para telefone celular com máscara: (99) 99999-9999
+    @Pattern(regexp = "\\(\\d{2}\\) \\d{5}-\\d{4}", message = "Telefone celular deve estar no formato (99) 99999-9999")
     @NotBlank(message = "Telefone celular é obrigatório")
     private String telefoneCelular;
 
-    @Pattern(regexp = "\\d{10,11}", message = "Telefone fixo deve ter entre 10 e 11 dígitos") // Ajuste a regex conforme a necessidade
+    // Regex para telefone fixo com máscara: (99) 9999-9999
+    @Pattern(regexp = "\\(\\d{2}\\) \\d{4}-\\d{4}", message = "Telefone fixo deve estar no formato (99) 9999-9999")
     private String telefoneFixo;
 
-    @Pattern(regexp = "^[\\w-_.+]*[\\w-_.]@[\\w]+[.][a-z]{2,3}$", message = "Endereço de e-mail inválido") // Regex básica para e-mail
+    // Para o e-mail
+    @Pattern(regexp = "^[\\w-_.+]*[\\w-_.]@[\\w]+[.][a-z]{2,3}$", message = "Endereço de e-mail inválido") 
+    @Column(nullable = true)
     private String email;
+    
+    @Column(nullable = false)
+    private String foto; // Campo para armazenar o caminho da foto
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import app.entity.Eleitor;
 import app.repository.EleitorRepository;
+import jakarta.validation.Valid;
 
 @Service
 public class EleitorService {
@@ -15,19 +16,47 @@ public class EleitorService {
     @Autowired
     private EleitorRepository eleitorRepository;
 
-    // Método para salvar ou atualizar um eleitor
-    public Eleitor salvarEleitor(Eleitor eleitor) {
-        if (eleitor.getCpf() == null || eleitor.getEmail() == null) {
-            eleitor.setStatus(Eleitor.StatusEleitor.PENDENTE);
+    public Eleitor salvarEleitor(@Valid Eleitor eleitor) {
+        boolean cpfVazio = eleitor.getCpf() == null || eleitor.getCpf().isEmpty();
+        boolean emailVazio = eleitor.getEmail() == null || eleitor.getEmail().isEmpty();
+
+        // Verifica se CPF ou e-mail estão vazios e define o status como PENDENTE em ambos os casos
+        if (cpfVazio && emailVazio) {
+            // Caso ambos CPF e e-mail estejam vazios
+            eleitor.setCpf(null);   // Define o CPF como null
+            eleitor.setEmail(null); // Define o e-mail como null
+            eleitor.setStatus(Eleitor.StatusEleitor.PENDENTE); // Define o status como PENDENTE
+        } else if (cpfVazio) {
+            // Caso apenas o CPF esteja vazio
+            eleitor.setCpf(null);   // Define o CPF como null
+            eleitor.setStatus(Eleitor.StatusEleitor.PENDENTE); // Define o status como PENDENTE
+        } else if (emailVazio) {
+            // Caso apenas o e-mail esteja vazio
+            eleitor.setEmail(null); // Define o e-mail como null
+            eleitor.setStatus(Eleitor.StatusEleitor.PENDENTE); // Define o status como PENDENTE
         } else {
-            eleitor.setStatus(Eleitor.StatusEleitor.APTO);
+            // Caso ambos CPF e e-mail estejam preenchidos
+            eleitor.setStatus(Eleitor.StatusEleitor.APTO); // Define o status como APTO
         }
+
+        // Salva ou atualiza o eleitor no banco de dados
         return eleitorRepository.save(eleitor);
+    }
+    
+    public Eleitor findByCpf(String cpf) {
+    	Eleitor eleitor = eleitorRepository.findByCpf(cpf).get();
+    	return eleitor;
+    }
+    
+    public Eleitor findById(Long id) {
+    	Eleitor eleitor = eleitorRepository.findById(id).get();
+    	return eleitor;
     }
     
     // Método para editar dados de um eleitor
     public Eleitor editarEleitor(Long eleitorId, Eleitor novosDados) {
-        Eleitor eleitor = eleitorRepository.findById(eleitorId)
+        
+    	Eleitor eleitor = eleitorRepository.findById(eleitorId)
                 .orElseThrow(() -> new RuntimeException("Eleitor não encontrado"));
 
         // Atualizar os campos com os novos dados
